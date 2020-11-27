@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using CoffeeApp.CoffeeMachine.Coffees;
+using CoffeeApp.CoffeeMachine.CoffeeEnums;
 
 namespace CoffeeApp.CoffeeMachine
 {
     class CoffeeMachine
     {
         int water, milk, beans, cups, money;
-        List<CoffeeType> coffeeTypes = new List<CoffeeType>()
+        List<ICoffee> coffeeTypes = new List<ICoffee>()
         {
-            new CoffeeType("espresso", 250, 0, 16, 4),
-            new CoffeeType("latte", 350, 75, 20, 7),
-            new CoffeeType("cappucino", 200, 100, 12, 6)
+            new Espresso(),
+            new Latte(),
+            new Cappucino()
         };
         
         public CoffeeMachine(int water = 400,
@@ -26,7 +28,7 @@ namespace CoffeeApp.CoffeeMachine
             this.money = money;
         }
 
-        void MakeCoffee(string coffeeName)
+        void MakeCoffee(CoffeeTypes coffeeName)
         {
             var chosenCoffee = coffeeTypes.Find(coffee => coffee.name == coffeeName);
 
@@ -35,7 +37,7 @@ namespace CoffeeApp.CoffeeMachine
                 this.water -= chosenCoffee.water;
                 this.milk -= chosenCoffee.milk;
                 this.beans -= chosenCoffee.beans;
-                this.money += chosenCoffee.money;
+                this.money += chosenCoffee.cost;
                 this.cups--;
             }
         }
@@ -54,7 +56,7 @@ namespace CoffeeApp.CoffeeMachine
             this.money = 0;
         }
 
-        bool CheckState(CoffeeType chosenCoffee)
+        bool CheckState(ICoffee chosenCoffee)
         { 
             if (this.water < chosenCoffee.water)
             {
@@ -79,7 +81,7 @@ namespace CoffeeApp.CoffeeMachine
                 Console.WriteLine("Sorry, not enough disposable cups of coffee!");
                 return false;
             }
-            
+
             else
             {
                 Console.WriteLine("I have enough resources, making you a coffee!");
@@ -122,17 +124,17 @@ namespace CoffeeApp.CoffeeMachine
                             switch (coffeeType)
                             {
                                 case "1":
-                                    MakeCoffee("espresso");
+                                    MakeCoffee(CoffeeTypes.Espresso);
                                     coffeeType = "back";
                                     break;
                                 
                                 case "2":
-                                    MakeCoffee("latte");
+                                    MakeCoffee(CoffeeTypes.Latte);
                                     coffeeType = "back";
                                     break;
                                 
                                 case "3":
-                                    MakeCoffee("cappucino");
+                                    MakeCoffee(CoffeeTypes.Cappucino);
                                     coffeeType = "back";
                                     break;
                                 
